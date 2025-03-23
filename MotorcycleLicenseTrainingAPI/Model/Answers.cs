@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MotorcycleLicenseTrainingAPI.Model
 {
-    public class AnswersDto
+    public class Answers
     {
         [Key]
         public int AnswerId { get; set; } 

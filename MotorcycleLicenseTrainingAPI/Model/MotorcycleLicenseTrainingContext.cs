@@ -15,7 +15,7 @@ namespace MotorcycleLicenseTrainingAPI.Model
         {
         }
 
-        public DbSet<AnswersDto> Answers { get; set; }
+        public DbSet<Answers> Answers { get; set; }
         public DbSet<Categories> Categories { get; set; }
         public DbSet<MockExamAnswers> MockExamAnswers { get; set; }
         public DbSet<MockExams> MockExams { get; set; }

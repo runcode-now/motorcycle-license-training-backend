@@ -20,7 +20,7 @@ namespace MotorcycleLicenseTrainingAPI.Model
 
         public virtual Categories Category { get; set; }
         public virtual ICollection<MockExams> MockExams { get; set; }
-        public virtual ICollection<AnswersDto> Answers { get; set; }
+        public virtual ICollection<Answers> Answers { get; set; }
         public virtual ICollection<PracticeHistories> PracticeHistories { get; set; }
 
     }
