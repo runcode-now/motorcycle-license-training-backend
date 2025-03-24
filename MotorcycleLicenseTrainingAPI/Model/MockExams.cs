@@ -15,6 +15,8 @@ namespace MotorcycleLicenseTrainingAPI.Model
         public bool IsPassed { get; set; } // Đậu hay rớt
 
         public string UserId { get; set; }
+
+        public string Status { get; set; }
         public ApplicationUsers User { get; set; }
 
         public virtual ICollection<Questions> Questions { get; set; }

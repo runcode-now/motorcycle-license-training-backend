@@ -16,6 +16,8 @@ namespace MotorcycleLicenseTrainingAPI.Model
         [ForeignKey("MockExams")]
         public int MockExamId { get; set; }
 
+        public int QuestionId { get; set; }
+
         public virtual MockExams MockExam { get; set; }
     }
 }

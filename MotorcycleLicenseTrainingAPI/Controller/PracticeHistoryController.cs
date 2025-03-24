@@ -33,32 +33,29 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             var practiceHistoryMap = _mapper.Map<PracticeHistories>(practiceHistory);
             var createdPracticeHistory = await _practiceHistoryService.CreatePracticeHistoryAsync(practiceHistoryMap);
 
-            return CreatedAtAction(nameof(GetById), new { id = createdPracticeHistory.PracticeHistoryId }, createdPracticeHistory);
+            return Ok(createdPracticeHistory);
         }
 
         // PUT: api/PracticeHistory/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] PracticeHistoriesDto practiceHistory)
         {
-            var result = context.PracticeHistories.FirstOrDefaultAsync(x => x.PracticeHistoryId == id);
+            PracticeHistories result = await context.PracticeHistories.FirstOrDefaultAsync(x => x.PracticeHistoryId == id);
 
-            if (result == null) { 
+            if (result == null)
+            {
                 return NotFound();
             }
 
-            PracticeHistories updateObject = new PracticeHistories()
-            {
-                PracticeHistoryId = id,
-                AnswerId = practiceHistory.AnswerId,
-                IsCorrect = practiceHistory.IsCorrect,
-                QuestionId = practiceHistory.QuestionId,
-                UserId = practiceHistory.UserId
-            };
+            result.AnswerId = practiceHistory.AnswerId;
+            result.IsCorrect = practiceHistory.IsCorrect;
+            result.QuestionId = practiceHistory.QuestionId;
+            result.UserId = practiceHistory.UserId;
 
-            context.PracticeHistories.Add(updateObject);
-            context.SaveChanges();
+            context.PracticeHistories.Update(result);
+            await context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
 
         // GET: api/PracticeHistory/5
@@ -75,6 +72,31 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             }
 
             return Ok(practiceHistory);
+        }
+
+        // GET: api/PracticeHistory/getByUser/{userId}
+        [HttpGet("getByUser/{userId}")]
+        public async Task<IActionResult> GetByUserId(string userId)
+        {
+            try
+            {
+                var practiceHistories = await context.PracticeHistories
+                    .Where(ph => ph.UserId == userId)
+                    .ToListAsync();
+
+                if (practiceHistories == null || !practiceHistories.Any())
+                {
+                    return NotFound(new { message = "Không tìm thấy lịch sử trả lời cho người dùng này." });
+                }
+
+                return Ok(practiceHistories);
+            }
+            catch (Exception ex)
+            {
+                // Ghi log lỗi
+                Console.WriteLine($"Lỗi khi lấy lịch sử trả lời: {ex.Message}");
+                return StatusCode(500, new { message = "Có lỗi xảy ra khi lấy lịch sử trả lời. Vui lòng thử lại sau." });
+            }
         }
     }
 }

@@ -40,5 +40,7 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
             await _context.SaveChangesAsync();
             return practiceHistory;
         }
+
+
     }
 }
