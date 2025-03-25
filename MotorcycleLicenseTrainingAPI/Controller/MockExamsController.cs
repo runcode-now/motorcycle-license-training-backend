@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MotorcycleLicenseTrainingAPI.DTO;
@@ -17,12 +18,13 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpGet("getByUser/{userId}")]
+        [Authorize]
         public async Task<IActionResult> Get(string userId)
         {
             try
             {
                 List<MockExams> mockExamsList = _context.MockExams.Where(x => x.UserId == userId).ToList();
-                
+
                 if (mockExamsList.Count == 0)
                 {
                     return NotFound();
@@ -38,6 +40,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 
         // POST: api/MockExams/create
         [HttpPost("create")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] MockExamsDto createDto)
         {
             try
@@ -47,46 +50,33 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                     return BadRequest(new { message = "Dữ liệu không hợp lệ. Vui lòng cung cấp userId." });
                 }
 
-                // Tạo bài thi mới với 25 câu hỏi ngẫu nhiên
+                // Lấy ngẫu nhiên 25 câu hỏi
                 var questions = await _context.Questions
-                    .OrderBy(q => Guid.NewGuid()) // Chọn ngẫu nhiên
-                    .Take(25) // Lấy 25 câu hỏi
-                    .Select(q => q.QuestionId)
+                    .OrderBy(q => Guid.NewGuid())
+                    .Take(25)
                     .ToListAsync();
 
-                if (questions.Count < 25)
-                {
-                    return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 25 câu hỏi." });
-                }
+                //if (questions.Count < 25)
+                //{
+                //    return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 25 câu hỏi." });
+                //}
 
+                // Tạo bài thi mới
                 var mockExam = new MockExams
                 {
                     ExamDate = DateTime.Now,
-                    TotalScore = -1, 
+                    TotalScore = -1,
                     UserId = createDto.UserId,
-                    Status = "not_started",
+                    Status = "not_started"
                 };
+
+                // Thêm danh sách câu hỏi vào MockExam
+                mockExam.Questions = questions;
 
                 _context.MockExams.Add(mockExam);
                 await _context.SaveChangesAsync();
 
-                // Lưu danh sách câu hỏi vào bảng trung gian (MockExamQuestions)
-                var examQuestions = questions.Select(qId => new MockExamQuestions
-                                                        {
-                                                            ExamId = mockExam.ExamId,
-                                                            QuestionId = qId
-                                                        }).ToList();
-
-                _context.MockExamQuestions.AddRange(examQuestions);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(GetByUser), new { userId = mockExam.UserId }, new
-                {
-                    examId = mockExam.ExamId,
-                    userId = mockExam.UserId,
-                    status = mockExam.Status,
-                    totalTime = mockExam.TotalTime
-                });
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -95,46 +85,128 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             }
         }
 
-        // POST: api/MockExams/start/{examId}
-        [HttpPost("start/{examId}")]
-        public async Task<IActionResult> Start(int examId)
+        // GET: api/MockExams/{examId}
+        [HttpGet("{examId}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(int examId)
         {
             try
             {
-                var mockExam = await _context.MockExams.FindAsync(examId);
+                var mockExam = await _context.MockExams.Include(x => x.Questions).FirstOrDefaultAsync(me => me.MockExamId == examId);
+
                 if (mockExam == null)
                 {
                     return NotFound(new { message = $"Không tìm thấy bài thi với ID {examId}." });
                 }
 
-                // Đảm bảo bài thi ở trạng thái not_started
-                if (mockExam.Status != "not_started")
-                {
-                    return BadRequest(new { message = "Bài thi đã được hoàn thành hoặc không ở trạng thái bắt đầu." });
-                }
-
-                return Ok(new
-                {
-                    examId = mockExam.ExamId,
-                    userId = mockExam.UserId,
-                    status = mockExam.Status,
-                    totalTime = mockExam.TotalTime
-                });
+                return Ok(mockExam);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi khi bắt đầu bài thi: {ex.Message}");
-                return StatusCode(500, new { message = "Có lỗi xảy ra khi bắt đầu bài thi. Vui lòng thử lại sau." });
+                Console.WriteLine($"Lỗi khi lấy bài thi: {ex.Message}");
+                return StatusCode(500, new { message = "Có lỗi xảy ra khi lấy bài thi. Vui lòng thử lại sau." });
             }
         }
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             _context.MockExams.Remove(_context.MockExams.FirstOrDefault(x => x.MockExamId == id));
             _context.SaveChanges();
             return Ok("Get all categories");
         }
+
+        // POST: api/MockExams/submit
+        [HttpPost("submit")]
+        [Authorize]
+        public async Task<IActionResult> Submit([FromBody] MockExamSubmissionDto submission)
+        {
+            try
+            {
+                // Kiểm tra dữ liệu đầu vào
+                if (submission == null || submission.Answers == null || !submission.Answers.Any())
+                {
+                    return BadRequest(new { message = "Dữ liệu không hợp lệ. Vui lòng cung cấp danh sách câu trả lời." });
+                }
+
+                // Kiểm tra bài thi có tồn tại không
+                var mockExam = await _context.MockExams
+                    .Include(me => me.Questions) // Lấy danh sách câu hỏi của bài thi
+                    .FirstOrDefaultAsync(me => me.MockExamId == submission.ExamId);
+
+                if (mockExam == null)
+                {
+                    return NotFound(new { message = $"Không tìm thấy bài thi với ID {submission.ExamId}." });
+                }
+
+                // Kiểm tra xem bài thi đã hoàn thành chưa
+                if (mockExam.Status == "completed")
+                {
+                    return BadRequest(new { message = "Bài thi đã được nộp trước đó." });
+                }
+
+                // Kiểm tra userId
+                if (mockExam.UserId != submission.UserId)
+                {
+                    return BadRequest(new { message = "Người dùng không có quyền nộp bài thi này." });
+                }
+
+                // Tính điểm và lưu lịch sử câu trả lời
+                int score = 0;
+                foreach (var userAnswer in submission.Answers)
+                {
+                    // Kiểm tra câu hỏi có thuộc bài thi không
+                    var question = mockExam.Questions.FirstOrDefault(q => q.QuestionId == userAnswer.QuestionId);
+                    if (question == null)
+                    {
+                        continue; // Bỏ qua nếu câu hỏi không thuộc bài thi
+                    }
+
+                    // Lấy đáp án đúng từ bảng Answers
+                    var correctAnswer = await _context.Answers
+                        .FirstOrDefaultAsync(a => a.QuestionId == userAnswer.QuestionId && a.IsCorrect == true);
+
+                    bool isCorrect = false;
+                    if (correctAnswer != null && userAnswer.AnswerId == correctAnswer.AnswerId)
+                    {
+                        score++;
+                        isCorrect = true;
+                    }
+
+                    // Lưu câu trả lời của người dùng vào bảng MockExamAnswers
+                    var mockExamAnswer = new MockExamAnswers
+                    {
+                        MockExamId = submission.ExamId,
+                        QuestionId = userAnswer.QuestionId,
+                        AnswerId = userAnswer.AnswerId,
+                        IsCorrect = isCorrect
+                    };
+                    _context.MockExamAnswers.Add(mockExamAnswer);
+                }
+
+                // Cập nhật trạng thái bài thi
+                mockExam.TotalScore = score;
+                mockExam.IsPassed = score >= 21; // Ví dụ: Đậu nếu đạt 21/25
+                mockExam.Status = "completed";
+
+                // Lưu thay đổi vào database
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    score = score,
+                    totalQuestions = mockExam.Questions.Count,
+                    isPassed = mockExam.IsPassed
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi nộp bài thi: {ex.Message}");
+                return StatusCode(500, new { message = "Có lỗi xảy ra khi nộp bài thi. Vui lòng thử lại sau." });
+            }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MotorcycleLicenseTrainingAPI.Service.Interface;
 
@@ -16,6 +17,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpGet("getByCategory/{categoryId}")]
+        [Authorize]
         public async Task<IActionResult> Get(int categoryId)
         {
             try

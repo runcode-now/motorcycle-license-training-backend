@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 
         // POST: api/PracticeHistory
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] PracticeHistoriesDto practiceHistory)
         {
             if (!ModelState.IsValid)
@@ -37,6 +39,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         // PUT: api/PracticeHistory/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] PracticeHistoriesDto practiceHistory)
         {
@@ -59,6 +62,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         // GET: api/PracticeHistory/5
+        [Authorize]
         [HttpGet("getPracticeHistory/{userId}/{questionId}")]
         public async Task<IActionResult> GetByUserIdAndQuestionId(string userId, int questionId)
         {
@@ -76,6 +80,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 
         // GET: api/PracticeHistory/getByUser/{userId}
         [HttpGet("getByUser/{userId}")]
+        [Authorize]
         public async Task<IActionResult> GetByUserId(string userId)
         {
             try

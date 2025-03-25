@@ -19,6 +19,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpGet("getCategoryByType/{type}")]
+        [Authorize]
         public async Task<IActionResult> Get([FromRoute] string type)
         {
             try 
@@ -33,6 +34,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
 
