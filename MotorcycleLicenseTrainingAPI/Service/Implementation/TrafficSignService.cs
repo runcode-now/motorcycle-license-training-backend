@@ -4,16 +4,16 @@ using MotorcycleLicenseTrainingAPI.Service.Interface;
 
 namespace MotorcycleLicenseTrainingAPI.Service.Implementation
 {
-    public class TrafficSignService : ITrafficSignService
+    public class TrafficSignervice : ITrafficSignervice
     {
         private readonly ITrafficSignRepository _trafficSignRepository;
 
-        public TrafficSignService(ITrafficSignRepository trafficSignRepository)
+        public TrafficSignervice(ITrafficSignRepository trafficSignRepository)
         {
             _trafficSignRepository = trafficSignRepository;
         }
 
-        public async Task<IEnumerable<TrafficSigns>> GetTrafficSignByCategoryId(int categoryId)
+        public async Task<IEnumerable<TrafficSign>> GetTrafficSignByCategoryId(int categoryId)
             => await _trafficSignRepository.GetTrafficSignByCategoryId(categoryId);
     }
 }

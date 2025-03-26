@@ -4,16 +4,16 @@ using MotorcycleLicenseTrainingAPI.Service.Interface;
 
 namespace MotorcycleLicenseTrainingAPI.Service.Implementation
 {
-    public class QuestionService : IQuestionService
+    public class Questionervice : IQuestionervice
     {
         private readonly IQuestionRepository _questionRepository;
 
-        public QuestionService(IQuestionRepository questionRepository)
+        public Questionervice(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
         }
 
-        public async Task<IEnumerable<Questions>> GetQuestionByCategoryId(int categoryId)
+        public async Task<IEnumerable<Question>> GetQuestionByCategoryId(int categoryId)
         {
             try
             {

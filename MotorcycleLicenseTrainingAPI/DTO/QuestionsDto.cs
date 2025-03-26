@@ -1,6 +1,6 @@
 ﻿namespace MotorcycleLicenseTrainingAPI.DTO
 {
-    public class QuestionsDto
+    public class QuestionDto
     {
 
     }

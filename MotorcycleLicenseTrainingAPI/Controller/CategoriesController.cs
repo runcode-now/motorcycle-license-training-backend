@@ -9,11 +9,11 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
@@ -38,7 +38,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         public IActionResult Delete(int id)
         {
 
-            return Ok("Get all categories");
+            return Ok("Get all Category");
         }
     }
 }

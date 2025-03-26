@@ -2,9 +2,9 @@
 
 namespace MotorcycleLicenseTrainingAPI.Service.Interface
 {
-    public interface IQuestionService
+    public interface IQuestionervice
     {
-        public Task<IEnumerable<Questions>> GetQuestionByCategoryId(int categoryId);
+        public Task<IEnumerable<Question>> GetQuestionByCategoryId(int categoryId);
 
     }
 }

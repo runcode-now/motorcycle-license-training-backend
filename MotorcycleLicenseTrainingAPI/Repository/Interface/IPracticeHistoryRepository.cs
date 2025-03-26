@@ -5,8 +5,8 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Interface
 {
     public interface IPracticeHistoryRepository
     {
-        public Task<PracticeHistories> CreatePracticeHistoryAsync(PracticeHistories practiceHistory);
-        public Task<PracticeHistories> UpdatePracticeHistoryAsync(PracticeHistories practiceHistory);
-        public Task<PracticeHistories> GetPracticeHistoryByIdAsync(int id);
+        public Task<PracticeHistory> CreatePracticeHistoryAsync(PracticeHistory practiceHistory);
+        public Task<PracticeHistory> UpdatePracticeHistoryAsync(PracticeHistory practiceHistory);
+        public Task<PracticeHistory> GetPracticeHistoryByIdAsync(int id);
     }
 }

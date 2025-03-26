@@ -1,6 +1,6 @@
 ﻿namespace MotorcycleLicenseTrainingAPI.Repository.Interface
 {
-    public interface IMockExamsReposioty
+    public interface IMockExamReposioty
     {
     }
 }

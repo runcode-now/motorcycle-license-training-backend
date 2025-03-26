@@ -12,7 +12,7 @@ namespace MotorcycleLicenseTrainingAPI.Service.Implementation
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<IEnumerable<Categories>> GetCategoryByType(string type)
+        public async Task<IEnumerable<Category>> GetCategoryByType(string type)
         => await _categoryRepository.GetCategoryByType(type);
     }
 }

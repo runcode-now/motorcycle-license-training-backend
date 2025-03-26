@@ -11,8 +11,8 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
         {
             _context = context;
         }
-        public async Task<IEnumerable<Categories>> GetCategoryByType(string type)
-        => await _context.Categories.Where(x => x.Type == type)
+        public async Task<IEnumerable<Category>> GetCategoryByType(string type)
+        => await _context.Category.Where(x => x.Type == type)
                                     .ToListAsync();
 
     }

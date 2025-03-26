@@ -9,7 +9,7 @@ namespace MotorcycleLicenseTrainingAPI.Model
         public string Email { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public virtual ICollection<PracticeHistories> PracticeHistories { get; set; }
-        public virtual ICollection<MockExams> MockExams { get; set; }
+        public virtual ICollection<PracticeHistory> PracticeHistories { get; set; }
+        public virtual ICollection<MockExam> MockExams { get; set; }
     }
 }

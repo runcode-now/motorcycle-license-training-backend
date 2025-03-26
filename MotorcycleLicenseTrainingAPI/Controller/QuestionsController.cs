@@ -9,13 +9,13 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class QuestionController : ControllerBase
     {
-        private readonly IQuestionService _questionService;
+        private readonly IQuestionervice _Questionervice;
         private MotorcycleLicenseTrainingContext _context = new MotorcycleLicenseTrainingContext();
-        public QuestionsController(IQuestionService questionService)
+        public QuestionController(IQuestionervice Questionervice)
         {
-            _questionService = questionService;
+            _Questionervice = Questionervice;
         }
 
         [HttpGet("getByCategory/{categoryId}")]
@@ -24,7 +24,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         {
             try
             {
-                var questionList = await _questionService.GetQuestionByCategoryId(categoryId);
+                var questionList = await _Questionervice.GetQuestionByCategoryId(categoryId);
                 return Ok(questionList);
             }
             catch (Exception ex)
@@ -33,14 +33,14 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             }
         }
 
-        // GET: api/Questions/getById/{questionId}
+        // GET: api/Question/getById/{questionId}
         [HttpGet("getById/{questionId}")]
         [Authorize]
         public async Task<IActionResult> GetById(int questionId)
         {
             try
             {
-                var question = await _context.Questions
+                var question = await _context.Question
                     .Where(q => q.QuestionId == questionId)
                     .Select(q => new
                     {
@@ -49,7 +49,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                         ImageUrl = q.ImageUrl,
                         Reason = q.Reason,
                         CategoryId = q.CategoryId,
-                        Answers = q.Answers.Select(a => new
+                        Answer = q.Answers.Select(a => new
                         {
                             AnswerId = a.AnswerId,
                             AnswerText = a.AnswerText,

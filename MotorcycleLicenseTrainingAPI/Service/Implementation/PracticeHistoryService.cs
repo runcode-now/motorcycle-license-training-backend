@@ -14,17 +14,17 @@ namespace MotorcycleLicenseTrainingAPI.Service.Implementation
             _practiceHistoryRepository = practiceHistoryRepository;
         }
 
-        public async Task<PracticeHistories> CreatePracticeHistoryAsync(PracticeHistories practiceHistory)
+        public async Task<PracticeHistory> CreatePracticeHistoryAsync(PracticeHistory practiceHistory)
         {
             return await _practiceHistoryRepository.CreatePracticeHistoryAsync(practiceHistory);
         }
 
-        public async Task<PracticeHistories> UpdatePracticeHistoryAsync(PracticeHistories practiceHistory)
+        public async Task<PracticeHistory> UpdatePracticeHistoryAsync(PracticeHistory practiceHistory)
         {
             return await _practiceHistoryRepository.UpdatePracticeHistoryAsync(practiceHistory);
         }
 
-        public async Task<PracticeHistories> GetPracticeHistoryByIdAsync(int id)
+        public async Task<PracticeHistory> GetPracticeHistoryByIdAsync(int id)
         {
             return await _practiceHistoryRepository.GetPracticeHistoryByIdAsync(id);
         }

@@ -25,14 +25,14 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         // POST: api/PracticeHistory
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] PracticeHistoriesDto practiceHistory)
+        public async Task<IActionResult> Create([FromBody] PracticeHistoryDto practiceHistory)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var practiceHistoryMap = _mapper.Map<PracticeHistories>(practiceHistory);
+            var practiceHistoryMap = _mapper.Map<PracticeHistory>(practiceHistory);
             var createdPracticeHistory = await _practiceHistoryService.CreatePracticeHistoryAsync(practiceHistoryMap);
 
             return Ok(createdPracticeHistory);
@@ -41,9 +41,9 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         // PUT: api/PracticeHistory/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] PracticeHistoriesDto practiceHistory)
+        public async Task<IActionResult> Update(int id, [FromBody] PracticeHistoryDto practiceHistory)
         {
-            PracticeHistories result = await context.PracticeHistories.FirstOrDefaultAsync(x => x.PracticeHistoryId == id);
+            PracticeHistory result = await context.PracticeHistory.FirstOrDefaultAsync(x => x.PracticeHistoryId == id);
 
             if (result == null)
             {
@@ -55,7 +55,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             result.QuestionId = practiceHistory.QuestionId;
             result.UserId = practiceHistory.UserId;
 
-            context.PracticeHistories.Update(result);
+            context.PracticeHistory.Update(result);
             await context.SaveChangesAsync();
 
             return Ok();
@@ -67,7 +67,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         public async Task<IActionResult> GetByUserIdAndQuestionId(string userId, int questionId)
         {
 
-            var practiceHistory = await context.PracticeHistories
+            var practiceHistory = await context.PracticeHistory
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.QuestionId == questionId);
 
             if (practiceHistory == null)
@@ -85,16 +85,16 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         {
             try
             {
-                var practiceHistories = await context.PracticeHistories
+                var PracticeHistory = await context.PracticeHistory
                     .Where(ph => ph.UserId == userId)
                     .ToListAsync();
 
-                if (practiceHistories == null || !practiceHistories.Any())
+                if (PracticeHistory == null || !PracticeHistory.Any())
                 {
                     return NotFound(new { message = "Không tìm thấy lịch sử trả lời cho người dùng này." });
                 }
 
-                return Ok(practiceHistories);
+                return Ok(PracticeHistory);
             }
             catch (Exception ex)
             {

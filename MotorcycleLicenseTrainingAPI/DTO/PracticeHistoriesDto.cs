@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MotorcycleLicenseTrainingAPI.DTO
 {
-    public class PracticeHistoriesDto
+    public class PracticeHistoryDto
     {
         public int AnswerId { get; set; }
 

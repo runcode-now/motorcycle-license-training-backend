@@ -2,7 +2,7 @@
 
 namespace MotorcycleLicenseTrainingAPI.Service.Implementation
 {
-    public class MockExamsSerivce : IMockExamsSerivce
+    public class MockExamSerivce : IMockExamSerivce
     {
     }
 }

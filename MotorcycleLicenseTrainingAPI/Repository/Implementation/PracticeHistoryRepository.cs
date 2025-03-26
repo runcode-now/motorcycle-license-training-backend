@@ -13,11 +13,11 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
             _context = context;
         }
 
-        public async Task<PracticeHistories> CreatePracticeHistoryAsync(PracticeHistories practiceHistory)
+        public async Task<PracticeHistory> CreatePracticeHistoryAsync(PracticeHistory practiceHistory)
         {
             try
             {
-                _context.PracticeHistories.Add(practiceHistory);
+                _context.PracticeHistory.Add(practiceHistory);
                 await _context.SaveChangesAsync();
                 return practiceHistory;
             }
@@ -29,14 +29,14 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
             
         }
 
-        public async Task<PracticeHistories> GetPracticeHistoryByIdAsync(int id)
+        public async Task<PracticeHistory> GetPracticeHistoryByIdAsync(int id)
         {
-            return await _context.PracticeHistories.FindAsync(id);
+            return await _context.PracticeHistory.FindAsync(id);
         }
 
-        public async Task<PracticeHistories> UpdatePracticeHistoryAsync(PracticeHistories practiceHistory)
+        public async Task<PracticeHistory> UpdatePracticeHistoryAsync(PracticeHistory practiceHistory)
         {
-            _context.PracticeHistories.Update(practiceHistory);
+            _context.PracticeHistory.Update(practiceHistory);
             await _context.SaveChangesAsync();
             return practiceHistory;
         }

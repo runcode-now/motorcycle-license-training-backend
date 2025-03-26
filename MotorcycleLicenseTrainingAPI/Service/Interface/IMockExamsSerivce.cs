@@ -1,6 +1,6 @@
 ﻿namespace MotorcycleLicenseTrainingAPI.Service.Interface
 {
-    public interface IMockExamsSerivce
+    public interface IMockExamSerivce
     {
     }
 }

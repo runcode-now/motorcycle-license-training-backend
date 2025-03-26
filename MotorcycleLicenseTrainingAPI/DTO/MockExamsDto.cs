@@ -2,7 +2,7 @@
 
 namespace MotorcycleLicenseTrainingAPI.DTO
 {
-    public class MockExamsDto
+    public class MockExamDto
     {
         public int TotalScore { get; set; } 
 

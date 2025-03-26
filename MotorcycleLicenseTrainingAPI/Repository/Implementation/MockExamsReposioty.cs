@@ -2,7 +2,7 @@
 
 namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
 {
-    public class MockExamsReposioty : IMockExamsReposioty
+    public class MockExamReposioty : IMockExamReposioty
     {
     }
 }

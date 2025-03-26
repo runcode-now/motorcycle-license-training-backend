@@ -14,16 +14,16 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
             _context = context;
         }
 
-        public Task<IEnumerable<Questions>> Delete(int trafficId, QuestionsDto trafficDto)
+        public Task<IEnumerable<Question>> Delete(int trafficId, QuestionDto trafficDto)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Questions>> GetQuestionByCategoryId(int categoryId)
+        public async Task<IEnumerable<Question>> GetQuestionByCategoryId(int categoryId)
         {
             try
             {
-                var result =  await _context.Questions.Where(x => x.CategoryId == categoryId)
+                var result =  await _context.Question.Where(x => x.CategoryId == categoryId)
                                    .Include(q => q.Answers)
                                    .ToListAsync();
                 return result;
@@ -37,7 +37,7 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
 
          
 
-        public Task<IEnumerable<Questions>> Update(QuestionsDto trafficDto)
+        public Task<IEnumerable<Question>> Update(QuestionDto trafficDto)
         {
             throw new NotImplementedException();
         }

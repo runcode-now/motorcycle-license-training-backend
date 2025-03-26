@@ -8,7 +8,7 @@ namespace MotorcycleLicenseTrainingAPI.Mapper
     {
         public PracticeHistoryProfile()
         {
-            CreateMap<PracticeHistories, PracticeHistoriesDto>().ReverseMap();
+            CreateMap<PracticeHistory, PracticeHistoryDto>().ReverseMap();
         }
     }
 }

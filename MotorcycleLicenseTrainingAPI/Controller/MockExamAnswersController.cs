@@ -8,16 +8,16 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MockExamAnswersController : ControllerBase
+    public class MockExamAnswerController : ControllerBase
     {
         private readonly MotorcycleLicenseTrainingContext _context;
 
-        public MockExamAnswersController(MotorcycleLicenseTrainingContext context)
+        public MockExamAnswerController(MotorcycleLicenseTrainingContext context)
         {
             _context = context;
         }
 
-        // GET: api/MockExamAnswers/getByExam/{examId}
+        // GET: api/MockExamAnswer/getByExam/{examId}
         [HttpGet("getByExam/{examId}")]
         [Authorize]
         public async Task<IActionResult> GetByExam(int examId)
@@ -25,7 +25,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             try
             {
                 // Kiểm tra bài thi có tồn tại không
-                var mockExam = await _context.MockExams
+                var mockExam = await _context.MockExam
                     .FirstOrDefaultAsync(me => me.MockExamId == examId);
 
                 if (mockExam == null)
@@ -34,7 +34,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 }
 
                 // Lấy danh sách câu trả lời của người dùng
-                var answers = await _context.MockExamAnswers
+                var Answer = await _context.MockExamAnswer
                     .Where(mea => mea.MockExamId == examId)
                     .Select(mea => new
                     {
@@ -46,12 +46,12 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                     })
                     .ToListAsync();
 
-                if (!answers.Any())
+                if (!Answer.Any())
                 {
                     return NotFound(new { message = "Không tìm thấy câu trả lời nào cho bài thi này." });
                 }
 
-                return Ok(answers);
+                return Ok(Answer);
             }
             catch (Exception ex)
             {

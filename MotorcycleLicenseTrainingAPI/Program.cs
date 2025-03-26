@@ -19,10 +19,10 @@ namespace MotorcycleLicenseTrainingAPI
         // Method to inject custom services
         private static void InjectService(IServiceCollection services)
         {
-            services.AddScoped<ITrafficSignService, TrafficSignService>();
+            services.AddScoped<ITrafficSignervice, TrafficSignervice>();
             services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IQuestionService, QuestionService>();
-            services.AddScoped<IMockExamsSerivce, MockExamsSerivce>();
+            services.AddScoped<IQuestionervice, Questionervice>();
+            services.AddScoped<IMockExamSerivce, MockExamSerivce>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IPracticeHistoryService, PracticeHistoryService>();
 
@@ -30,7 +30,7 @@ namespace MotorcycleLicenseTrainingAPI
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IPracticeHistoryRepository, PracticeHistoryRepository>();
-            services.AddScoped<IMockExamsReposioty, MockExamsReposioty>();
+            services.AddScoped<IMockExamReposioty, MockExamReposioty>();
             services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
             services.AddScoped<IPracticeHistoryRepository, PracticeHistoryRepository>();
         }

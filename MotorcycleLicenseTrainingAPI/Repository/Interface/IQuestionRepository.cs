@@ -5,9 +5,9 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Interface
 {
     public interface IQuestionRepository
     {
-        public Task<IEnumerable<Questions>> GetQuestionByCategoryId(int categoryId);
-        public Task<IEnumerable<Questions>> Update(QuestionsDto trafficDto);
-        public Task<IEnumerable<Questions>> Delete(int trafficId, QuestionsDto trafficDto);
+        public Task<IEnumerable<Question>> GetQuestionByCategoryId(int categoryId);
+        public Task<IEnumerable<Question>> Update(QuestionDto trafficDto);
+        public Task<IEnumerable<Question>> Delete(int trafficId, QuestionDto trafficDto);
 
     }
 }

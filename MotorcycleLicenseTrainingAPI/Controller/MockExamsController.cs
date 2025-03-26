@@ -9,11 +9,11 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MockExamsController : ControllerBase
+    public class MockExamController : ControllerBase
     {
         private MotorcycleLicenseTrainingContext _context = new MotorcycleLicenseTrainingContext();
 
-        public MockExamsController()
+        public MockExamController()
         {
         }
 
@@ -23,14 +23,14 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         {
             try
             {
-                List<MockExams> mockExamsList = _context.MockExams.Where(x => x.UserId == userId).ToList();
+                List<MockExam> MockExamList = _context.MockExam.Where(x => x.UserId == userId).ToList();
 
-                if (mockExamsList.Count == 0)
+                if (MockExamList.Count == 0)
                 {
                     return NotFound();
                 }
 
-                return Ok(mockExamsList);
+                return Ok(MockExamList);
             }
             catch (Exception ex)
             {
@@ -38,10 +38,10 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             }
         }
 
-        // POST: api/MockExams/create
+        // POST: api/MockExam/create
         [HttpPost("create")]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] MockExamsDto createDto)
+        public async Task<IActionResult> Create([FromBody] MockExamDto createDto)
         {
             try
             {
@@ -51,18 +51,18 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 }
 
                 // Lấy ngẫu nhiên 25 câu hỏi
-                var questions = await _context.Questions
+                var Question = await _context.Question
                     .OrderBy(q => Guid.NewGuid())
                     .Take(25)
                     .ToListAsync();
 
-                //if (questions.Count < 25)
+                //if (Question.Count < 25)
                 //{
                 //    return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 25 câu hỏi." });
                 //}
 
                 // Tạo bài thi mới
-                var mockExam = new MockExams
+                var mockExam = new MockExam
                 {
                     ExamDate = DateTime.Now,
                     TotalScore = -1,
@@ -71,9 +71,9 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 };
 
                 // Thêm danh sách câu hỏi vào MockExam
-                mockExam.Questions = questions;
+                mockExam.Questions = Question;
 
-                _context.MockExams.Add(mockExam);
+                _context.MockExam.Add(mockExam);
                 await _context.SaveChangesAsync();
 
                 return Ok();
@@ -85,14 +85,14 @@ namespace MotorcycleLicenseTrainingAPI.Controller
             }
         }
 
-        // GET: api/MockExams/{examId}
+        // GET: api/MockExam/{examId}
         [HttpGet("{examId}")]
         [Authorize]
         public async Task<IActionResult> GetById(int examId)
         {
             try
             {
-                var mockExam = await _context.MockExams.Include(x => x.Questions).FirstOrDefaultAsync(me => me.MockExamId == examId);
+                var mockExam = await _context.MockExam.Include(x => x.Questions).FirstOrDefaultAsync(me => me.MockExamId == examId);
 
                 if (mockExam == null)
                 {
@@ -113,26 +113,26 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         [Authorize]
         public IActionResult Delete(int id)
         {
-            _context.MockExams.Remove(_context.MockExams.FirstOrDefault(x => x.MockExamId == id));
+            _context.MockExam.Remove(_context.MockExam.FirstOrDefault(x => x.MockExamId == id));
             _context.SaveChanges();
-            return Ok("Get all categories");
+            return Ok("Get all Category");
         }
 
-        // POST: api/MockExams/submit
+        // POST: api/MockExam/submit
         [HttpPost("submit")]
         [Authorize]
-        public async Task<IActionResult> Submit([FromBody] MockExamSubmissionDto submission)
+        public async Task<IActionResult> Submit([FromBody] MockExamubmissionDto submission)
         {
             try
             {
                 // Kiểm tra dữ liệu đầu vào
-                if (submission == null || submission.Answers == null || !submission.Answers.Any())
+                if (submission == null || submission.Answer == null || !submission.Answer.Any())
                 {
                     return BadRequest(new { message = "Dữ liệu không hợp lệ. Vui lòng cung cấp danh sách câu trả lời." });
                 }
 
                 // Kiểm tra bài thi có tồn tại không
-                var mockExam = await _context.MockExams
+                var mockExam = await _context.MockExam
                     .Include(me => me.Questions) // Lấy danh sách câu hỏi của bài thi
                     .FirstOrDefaultAsync(me => me.MockExamId == submission.ExamId);
 
@@ -155,7 +155,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 
                 // Tính điểm và lưu lịch sử câu trả lời
                 int score = 0;
-                foreach (var userAnswer in submission.Answers)
+                foreach (var userAnswer in submission.Answer)
                 {
                     // Kiểm tra câu hỏi có thuộc bài thi không
                     var question = mockExam.Questions.FirstOrDefault(q => q.QuestionId == userAnswer.QuestionId);
@@ -164,8 +164,8 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                         continue; // Bỏ qua nếu câu hỏi không thuộc bài thi
                     }
 
-                    // Lấy đáp án đúng từ bảng Answers
-                    var correctAnswer = await _context.Answers
+                    // Lấy đáp án đúng từ bảng Answer
+                    var correctAnswer = await _context.Answer
                         .FirstOrDefaultAsync(a => a.QuestionId == userAnswer.QuestionId && a.IsCorrect == true);
 
                     bool isCorrect = false;
@@ -175,15 +175,15 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                         isCorrect = true;
                     }
 
-                    // Lưu câu trả lời của người dùng vào bảng MockExamAnswers
-                    var mockExamAnswer = new MockExamAnswers
+                    // Lưu câu trả lời của người dùng vào bảng MockExamAnswer
+                    var mockExamAnswer = new MockExamAnswer
                     {
                         MockExamId = submission.ExamId,
                         QuestionId = userAnswer.QuestionId,
                         AnswerId = userAnswer.AnswerId,
                         IsCorrect = isCorrect
                     };
-                    _context.MockExamAnswers.Add(mockExamAnswer);
+                    _context.MockExamAnswer.Add(mockExamAnswer);
                 }
 
                 // Cập nhật trạng thái bài thi
@@ -197,7 +197,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 return Ok(new
                 {
                     score = score,
-                    totalQuestions = mockExam.Questions.Count,
+                    totalQuestion = mockExam.Questions.Count,
                     isPassed = mockExam.IsPassed
                 });
             }

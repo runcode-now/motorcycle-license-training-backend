@@ -4,6 +4,6 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Interface
 {
     public interface ICategoryRepository
     {
-        public Task<IEnumerable<Categories>> GetCategoryByType(string type);
+        public Task<IEnumerable<Category>> GetCategoryByType(string type);
     }
 }
