@@ -12,7 +12,5 @@ namespace MotorcycleLicenseTrainingAPI.Model
 
         public int MockExamId { get; set; }
         public virtual MockExam MockExam { get; set; }
-        public Question Question { get; set; }
-        public Answer Answer { get; set; }
     }
 }

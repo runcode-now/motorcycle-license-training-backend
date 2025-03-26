@@ -12,7 +12,7 @@ using MotorcycleLicenseTrainingAPI.Model;
 namespace MotorcycleLicenseTrainingAPI.Migrations
 {
     [DbContext(typeof(MotorcycleLicenseTrainingContext))]
-    [Migration("20250326043028_Db1")]
+    [Migration("20250326044235_Db1")]
     partial class Db1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -800,7 +800,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                         {
                             Id = "77c46877-537a-4637-bafe-b76b21a2f56e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d7cb30fa-91dd-4ff1-b4ec-a449d53f9683",
+                            ConcurrencyStamp = "e32d454f-ad57-4df0-bb96-64eb8dd823aa",
                             CreatedAt = new DateTime(2025, 3, 25, 0, 4, 42, 607, DateTimeKind.Unspecified).AddTicks(9841),
                             Email = "demo11@gmail.com",
                             EmailConfirmed = false,
@@ -809,7 +809,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                             NormalizedUserName = "DEMO11@GMAIL.COM",
                             PasswordHash = "AQAAAAEAACcQAAAAENcEUydoUtT/B7gQw9O0TMdMvVZ11kOL7BXsa428YPOG84sJRcW1fcOTuYyN+xzmFQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "455c6853-6a45-40a9-9539-310166f8cfab",
+                            SecurityStamp = "291f971b-3b88-4a27-80d9-2a6e4710b719",
                             TwoFactorEnabled = false,
                             UserName = "demo11@gmail.com"
                         });
@@ -1061,7 +1061,6 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MockExamAnswerId"), 1L, 1);
 
                     b.Property<int?>("AnswerId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<bool>("IsCorrect")
@@ -1075,11 +1074,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
 
                     b.HasKey("MockExamAnswerId");
 
-                    b.HasIndex("AnswerId");
-
                     b.HasIndex("MockExamId");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("MockExamAnswer");
 
@@ -1127,7 +1122,6 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PracticeHistoryId"), 1L, 1);
 
                     b.Property<int?>("AnswerId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsCorrect")
@@ -1141,10 +1135,6 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PracticeHistoryId");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("QuestionId");
 
                     b.HasIndex("UserId");
 
@@ -1612,54 +1602,22 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
 
             modelBuilder.Entity("MotorcycleLicenseTrainingAPI.Model.MockExamAnswer", b =>
                 {
-                    b.HasOne("MotorcycleLicenseTrainingAPI.Model.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MotorcycleLicenseTrainingAPI.Model.MockExam", "MockExam")
                         .WithMany("MockExamAnswers")
                         .HasForeignKey("MockExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MotorcycleLicenseTrainingAPI.Model.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Answer");
-
                     b.Navigation("MockExam");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("MotorcycleLicenseTrainingAPI.Model.PracticeHistory", b =>
                 {
-                    b.HasOne("MotorcycleLicenseTrainingAPI.Model.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MotorcycleLicenseTrainingAPI.Model.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("MotorcycleLicenseTrainingAPI.Model.ApplicationUsers", "User")
                         .WithMany("PracticeHistories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("Question");
 
                     b.Navigation("User");
                 });

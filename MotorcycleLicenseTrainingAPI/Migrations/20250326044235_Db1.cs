@@ -195,6 +195,28 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PracticeHistory",
+                columns: table => new
+                {
+                    PracticeHistoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnswerId = table.Column<int>(type: "int", nullable: true),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PracticeHistory", x => x.PracticeHistoryId);
+                    table.ForeignKey(
+                        name: "FK_PracticeHistory_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Question",
                 columns: table => new
                 {
@@ -237,6 +259,28 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                         principalTable: "Category",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MockExamAnswer",
+                columns: table => new
+                {
+                    MockExamAnswerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
+                    AnswerId = table.Column<int>(type: "int", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    MockExamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MockExamAnswer", x => x.MockExamAnswerId);
+                    table.ForeignKey(
+                        name: "FK_MockExamAnswer_MockExam_MockExamId",
+                        column: x => x.MockExamId,
+                        principalTable: "MockExam",
+                        principalColumn: "MockExamId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -284,78 +328,10 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "MockExamAnswer",
-                columns: table => new
-                {
-                    MockExamAnswerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    AnswerId = table.Column<int>(type: "int", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false),
-                    MockExamId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MockExamAnswer", x => x.MockExamAnswerId);
-                    table.ForeignKey(
-                        name: "FK_MockExamAnswer_Answer_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answer",
-                        principalColumn: "AnswerId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MockExamAnswer_MockExam_MockExamId",
-                        column: x => x.MockExamId,
-                        principalTable: "MockExam",
-                        principalColumn: "MockExamId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MockExamAnswer_Question_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Question",
-                        principalColumn: "QuestionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PracticeHistory",
-                columns: table => new
-                {
-                    PracticeHistoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AnswerId = table.Column<int>(type: "int", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: true),
-                    QuestionId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PracticeHistory", x => x.PracticeHistoryId);
-                    table.ForeignKey(
-                        name: "FK_PracticeHistory_Answer_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answer",
-                        principalColumn: "AnswerId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PracticeHistory_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PracticeHistory_Question_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Question",
-                        principalColumn: "QuestionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "77c46877-537a-4637-bafe-b76b21a2f56e", 0, "d7cb30fa-91dd-4ff1-b4ec-a449d53f9683", new DateTime(2025, 3, 25, 0, 4, 42, 607, DateTimeKind.Unspecified).AddTicks(9841), "demo11@gmail.com", false, "string", false, null, null, "DEMO11@GMAIL.COM", "AQAAAAEAACcQAAAAENcEUydoUtT/B7gQw9O0TMdMvVZ11kOL7BXsa428YPOG84sJRcW1fcOTuYyN+xzmFQ==", null, false, "455c6853-6a45-40a9-9539-310166f8cfab", false, "demo11@gmail.com" });
+                values: new object[] { "77c46877-537a-4637-bafe-b76b21a2f56e", 0, "e32d454f-ad57-4df0-bb96-64eb8dd823aa", new DateTime(2025, 3, 25, 0, 4, 42, 607, DateTimeKind.Unspecified).AddTicks(9841), "demo11@gmail.com", false, "string", false, null, null, "DEMO11@GMAIL.COM", "AQAAAAEAACcQAAAAENcEUydoUtT/B7gQw9O0TMdMvVZ11kOL7BXsa428YPOG84sJRcW1fcOTuYyN+xzmFQ==", null, false, "291f971b-3b88-4a27-80d9-2a6e4710b719", false, "demo11@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "Category",
@@ -395,6 +371,22 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "PracticeHistory",
+                columns: new[] { "PracticeHistoryId", "AnswerId", "IsCorrect", "QuestionId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, 24, false, 12, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 2, 21, true, 11, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 3, 7, true, 1, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 4, 26, true, 13, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 5, 33, false, 14, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 6, 34, false, 15, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 7, 11, false, 2, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 8, 12, false, 3, "77c46877-537a-4637-bafe-b76b21a2f56e" },
+                    { 9, 39, false, 5, "77c46877-537a-4637-bafe-b76b21a2f56e" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Question",
                 columns: new[] { "QuestionId", "CategoryId", "ImageUrl", "IsFailing", "QuestionContent", "Reason" },
                 values: new object[,]
@@ -426,7 +418,14 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                     { 7, 3, "https://bizweb.dktcdn.net/thumb/grande/100/352/036/products/bien-bao-401.jpg?v=1600847944553", "Biểu thị ưu tiên cho các phương tiện trên đường có đặt biển này được đi trước.", "Biển số I.401 \"Bắt đầu đường ưu tiên\"" },
                     { 8, 3, "https://bizweb.dktcdn.net/thumb/grande/100/352/036/products/bien-bao-402.jpg?v=1600846599747", "Biểu thị hết đoạn đường quy định là ưu tiên.", "Biển số I.402 \"Hết đoạn đường ưu tiên\"" },
                     { 9, 3, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-81QbPq3MXpSKC9-L1J8Sromeeo2jQRxzYw&s", "Chỉ lối rẽ vào đường cụt.", "Biển số I.405a \"Đường cụt\"" },
-                    { 10, 3, "https://lh5.googleusercontent.com/proxy/R2QonNrldpzKmuP0W4wWKziXU4Yb5R08kL3XBFfzOuHwsmJm79K3pnfFZ8XqV-XIZPDV00QIrUcIIYPeEzqPbxITMUE", "Chỉ lối rẽ vào đường cụt.", "Biển số I.405b \"Đường cụt\"" },
+                    { 10, 3, "https://lh5.googleusercontent.com/proxy/R2QonNrldpzKmuP0W4wWKziXU4Yb5R08kL3XBFfzOuHwsmJm79K3pnfFZ8XqV-XIZPDV00QIrUcIIYPeEzqPbxITMUE", "Chỉ lối rẽ vào đường cụt.", "Biển số I.405b \"Đường cụt\"" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TrafficSign",
+                columns: new[] { "TrafficSignId", "CategoryId", "ImageUrl", "TrafficSignContent", "TrafficSignTitle" },
+                values: new object[,]
+                {
                     { 11, 2, "https://bizweb.dktcdn.net/thumb/grande/100/352/036/products/bien-bao-dung-lai.jpg?v=1599812231573", "Để báo các xe (có giới và thổ sơ) dừng lại.", "Biển số R122 \"Dừng lại\"" },
                     { 12, 2, "https://bizweb.dktcdn.net/thumb/grande/100/352/036/products/5748397301-jpeg.jpg?v=1599903632117", "Khi đặt biển số R.301a ở trước nơi đường giao nhau thì hiệu lực tác dụng của biển là ở phạm vi khu vực nơi đường giao nhau phía sau biển tức là cấm xe rẽ phải hay rẽ trái. Nếu biển này đặt ở sau nơi đường giao nhau (bắt đầu vào đoạn đường phố) thì hiệu lực tác dụng của biển là từ vị trí đặt biển đến nơi đường giao nhau. Trong trường hợp này cấm rẽ trái và quay đầu trong vùng tác dụng của biển, chỉ cho phép rẽ phải vào cổng nhà hoặc ngõ phố có trên đoạn đường từ nơi đường giao nhau đặt biển đến nơi đường giao nhau tiếp theo.", "Biển số R.301a \"Hướng đi phải theo\"" },
                     { 13, 2, "https://bizweb.dktcdn.net/thumb/1024x1024/100/352/036/products/1831909bien-hieu-lenh-301e-jpeg.jpg?v=1599903903743", "Nhằm chỉ hướng cho phép xe đi ngang qua nơi đường giao nhau và ngăn chặn hướng đi ngược chiều trên đường phố với đường một chiều. Biển bắt buộc người tham gia giao thông chỉ được phép rẽ phải hoặc rẽ trái ở phạm vi nơi đường giao nhau trước mặt biển.", "Biển số R.301b \"Hướng đi phải theo\"" },
@@ -485,20 +484,28 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "MockExamQuestion",
-                columns: new[] { "MockExamId", "QuestionId" },
+                table: "MockExamAnswer",
+                columns: new[] { "MockExamAnswerId", "AnswerId", "IsCorrect", "MockExamId", "QuestionId" },
                 values: new object[,]
                 {
-                    { 9, 1 },
-                    { 10, 1 },
-                    { 10, 2 }
+                    { 1, 5, true, 12, 1 },
+                    { 2, 11, false, 12, 2 },
+                    { 3, 5, true, 18, 1 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "MockExamAnswer",
+                columns: new[] { "MockExamAnswerId", "AnswerId", "IsCorrect", "MockExamId", "QuestionId" },
+                values: new object[] { 4, 12, false, 18, 2 });
 
             migrationBuilder.InsertData(
                 table: "MockExamQuestion",
                 columns: new[] { "MockExamId", "QuestionId" },
                 values: new object[,]
                 {
+                    { 9, 1 },
+                    { 10, 1 },
+                    { 10, 2 },
                     { 12, 1 },
                     { 12, 2 },
                     { 12, 3 },
@@ -536,11 +543,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                     { 19, 15 },
                     { 20, 1 },
                     { 20, 2 },
-                    { 20, 3 },
-                    { 20, 4 },
-                    { 20, 5 },
-                    { 20, 11 },
-                    { 20, 12 }
+                    { 20, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -548,38 +551,15 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 columns: new[] { "MockExamId", "QuestionId" },
                 values: new object[,]
                 {
+                    { 20, 4 },
+                    { 20, 5 },
+                    { 20, 11 },
+                    { 20, 12 },
                     { 20, 13 },
                     { 20, 14 },
                     { 20, 15 },
                     { 20, 16 },
                     { 20, 17 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "MockExamAnswer",
-                columns: new[] { "MockExamAnswerId", "AnswerId", "IsCorrect", "MockExamId", "QuestionId" },
-                values: new object[,]
-                {
-                    { 1, 5, true, 12, 1 },
-                    { 2, 11, false, 12, 2 },
-                    { 3, 5, true, 18, 1 },
-                    { 4, 12, false, 18, 2 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "PracticeHistory",
-                columns: new[] { "PracticeHistoryId", "AnswerId", "IsCorrect", "QuestionId", "UserId" },
-                values: new object[,]
-                {
-                    { 1, 24, false, 12, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 2, 21, true, 11, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 3, 7, true, 1, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 4, 26, true, 13, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 5, 33, false, 14, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 6, 34, false, 15, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 7, 11, false, 2, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 8, 12, false, 3, "77c46877-537a-4637-bafe-b76b21a2f56e" },
-                    { 9, 39, false, 5, "77c46877-537a-4637-bafe-b76b21a2f56e" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -632,33 +612,13 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MockExamAnswer_AnswerId",
-                table: "MockExamAnswer",
-                column: "AnswerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MockExamAnswer_MockExamId",
                 table: "MockExamAnswer",
                 column: "MockExamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MockExamAnswer_QuestionId",
-                table: "MockExamAnswer",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MockExamQuestion_QuestionId",
                 table: "MockExamQuestion",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PracticeHistory_AnswerId",
-                table: "PracticeHistory",
-                column: "AnswerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PracticeHistory_QuestionId",
-                table: "PracticeHistory",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
@@ -679,6 +639,9 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Answer");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -713,13 +676,10 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                 name: "MockExam");
 
             migrationBuilder.DropTable(
-                name: "Answer");
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "Category");

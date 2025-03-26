@@ -104,36 +104,6 @@ namespace MotorcycleLicenseTrainingAPI.Model
                 .HasForeignKey(mea => mea.MockExamId)
                 .OnDelete(DeleteBehavior.Cascade); // Xóa câu trả lời khi xóa bài thi
 
-            // 8. Cấu hình quan hệ 1-nhiều giữa Question và PracticeHistory
-            modelBuilder.Entity<PracticeHistory>()
-                .HasOne(ph => ph.Question)
-                .WithMany() // Không cần navigation property ngược lại
-                .HasForeignKey(ph => ph.QuestionId)
-                .OnDelete(DeleteBehavior.Restrict); // Không xóa câu hỏi nếu có lịch sử
-
-            // 9. Cấu hình quan hệ 0-1 giữa Answer và PracticeHistory
-            modelBuilder.Entity<PracticeHistory>()
-                .HasOne(ph => ph.Answer)
-                .WithMany() // Không cần navigation property ngược lại
-                .HasForeignKey(ph => ph.AnswerId)
-                .OnDelete(DeleteBehavior.Restrict); // Không xóa câu trả lời nếu có lịch sử
-
-            // 10. Cấu hình quan hệ 1-nhiều giữa Question và MockExamAnswer
-            modelBuilder.Entity<MockExamAnswer>()
-                .HasOne(mea => mea.Question)
-                .WithMany() // Không cần navigation property ngược lại
-                .HasForeignKey(mea => mea.QuestionId)
-                .OnDelete(DeleteBehavior.Restrict); // Không xóa câu hỏi nếu có câu trả lời bài thi
-
-            // 11. Cấu hình quan hệ 0-1 giữa Answer và MockExamAnswer
-            modelBuilder.Entity<MockExamAnswer>()
-                .HasOne(mea => mea.Answer)
-                .WithMany() // Không cần navigation property ngược lại
-                .HasForeignKey(mea => mea.AnswerId)
-                .OnDelete(DeleteBehavior.Restrict); // Không xóa câu trả lời nếu đã chọn trong bài thi
-
-
-
             // Seeding dữ liệu
             // 1. ApplicationUsers (AspNetUsers)
             modelBuilder.Entity<ApplicationUsers>().HasData(
