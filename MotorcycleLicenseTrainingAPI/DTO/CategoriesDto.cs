@@ -2,7 +2,7 @@
 
 namespace MotorcycleLicenseTrainingAPI.DTO
 {
-    public class CategoriesDto
+    public class CategoryDto
     {
 
         public string? CategoryName { get; set; }

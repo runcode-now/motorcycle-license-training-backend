@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MotorcycleLicenseTrainingAPI.DTO
 {
-    public class TrafficSignsDto
+    public class TrafficSignDto
     {
         public string TrafficSignTitle { get; set; }
         public string? ImageUrl { get; set; }

@@ -14,16 +14,16 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Implementation
             _context = context;
         }
 
-        public Task<IEnumerable<TrafficSigns>> Delete(int trafficId, TrafficSignsDto trafficDto)
+        public Task<IEnumerable<TrafficSign>> Delete(int trafficId, TrafficSignDto trafficDto)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TrafficSigns>> GetTrafficSignByCategoryId(int categoryId)
-        => await _context.TrafficSigns.Where(x => x.CategoryId == categoryId)
+        public async Task<IEnumerable<TrafficSign>> GetTrafficSignByCategoryId(int categoryId)
+        => await _context.TrafficSign.Where(x => x.CategoryId == categoryId)
                                       .ToListAsync();
 
-        public Task<IEnumerable<TrafficSigns>> Update(TrafficSignsDto trafficDto)
+        public Task<IEnumerable<TrafficSign>> Update(TrafficSignDto trafficDto)
         {
             throw new NotImplementedException();
         }

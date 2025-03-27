@@ -5,8 +5,8 @@ namespace MotorcycleLicenseTrainingAPI.Repository.Interface
 {
     public interface ITrafficSignRepository
     {
-        public Task<IEnumerable<TrafficSigns>> GetTrafficSignByCategoryId(int categoryId);
-        public Task<IEnumerable<TrafficSigns>> Update(TrafficSignsDto trafficDto);
-        public Task<IEnumerable<TrafficSigns>> Delete(int trafficId, TrafficSignsDto trafficDto);
+        public Task<IEnumerable<TrafficSign>> GetTrafficSignByCategoryId(int categoryId);
+        public Task<IEnumerable<TrafficSign>> Update(TrafficSignDto trafficDto);
+        public Task<IEnumerable<TrafficSign>> Delete(int trafficId, TrafficSignDto trafficDto);
     }
 }
