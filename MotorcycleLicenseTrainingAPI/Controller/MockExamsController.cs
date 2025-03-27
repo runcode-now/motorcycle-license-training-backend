@@ -188,7 +188,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 
                 // Cập nhật trạng thái bài thi
                 mockExam.TotalScore = score;
-                mockExam.IsPassed = score >= 21; // Ví dụ: Đậu nếu đạt 21/25
+                mockExam.IsPassed = score >= 1; // Ví dụ: Đậu nếu đạt 21/25
                 mockExam.Status = "completed";
 
                 // Lưu thay đổi vào database

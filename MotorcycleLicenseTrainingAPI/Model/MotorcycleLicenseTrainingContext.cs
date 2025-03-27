@@ -62,19 +62,19 @@ namespace MotorcycleLicenseTrainingAPI.Model
                         j.HasKey("MockExamId", "QuestionId"); // Khóa chính composite
                     });
 
-            // 2. Cấu hình quan hệ 1-nhiều giữa ApplicationUsers và PracticeHistory
-            modelBuilder.Entity<PracticeHistory>()
-                .HasOne(ph => ph.User)
-                .WithMany(u => u.PracticeHistories)
-                .HasForeignKey(ph => ph.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa lịch sử khi xóa user
+            //// 2. Cấu hình quan hệ 1-nhiều giữa ApplicationUsers và PracticeHistory
+            //modelBuilder.Entity<PracticeHistory>()
+            //    .HasOne(ph => ph.User)
+            //    .WithMany(u => u.PracticeHistories)
+            //    .HasForeignKey(ph => ph.UserId)
+            //    .OnDelete(DeleteBehavior.Cascade); // Xóa lịch sử khi xóa user
 
-            // 3. Cấu hình quan hệ 1-nhiều giữa ApplicationUsers và MockExam
-            modelBuilder.Entity<MockExam>()
-                .HasOne(me => me.User)
-                .WithMany(u => u.MockExams)
-                .HasForeignKey(me => me.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa bài thi khi xóa user
+            //// 3. Cấu hình quan hệ 1-nhiều giữa ApplicationUsers và MockExam
+            //modelBuilder.Entity<MockExam>()
+            //    .HasOne(me => me.User)
+            //    .WithMany(u => u.MockExams)
+            //    .HasForeignKey(me => me.UserId)
+            //    .OnDelete(DeleteBehavior.Cascade); // Xóa bài thi khi xóa user
 
             // 4. Cấu hình quan hệ 1-nhiều giữa Question và Answer
             modelBuilder.Entity<Answer>()
