@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MotorcycleLicenseTrainingAPI.Service.Interface;
 
@@ -6,13 +7,13 @@ namespace MotorcycleLicenseTrainingAPI.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrafficSignsController : ControllerBase
+    public class TrafficSignController : ControllerBase
     {
-        private readonly ITrafficSignService _trafficSignService;
+        private readonly ITrafficSignervice _TrafficSignervice;
 
-        public TrafficSignsController(ITrafficSignService trafficsignService)
+        public TrafficSignController(ITrafficSignervice TrafficSignervice)
         {
-            _trafficSignService = trafficsignService;   
+            _TrafficSignervice = TrafficSignervice;   
         }
 
         [HttpGet("getByCategory/{categoryId}")]
@@ -20,7 +21,7 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         {
             try
             {
-                var trafficList = await _trafficSignService.GetTrafficSignByCategoryId(categoryId);
+                var trafficList = await _TrafficSignervice.GetTrafficSignByCategoryId(categoryId);
                 return Ok(trafficList);
             }
             catch (Exception ex)

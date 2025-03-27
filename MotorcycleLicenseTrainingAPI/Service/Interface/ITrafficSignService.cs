@@ -2,8 +2,9 @@
 
 namespace MotorcycleLicenseTrainingAPI.Service.Interface
 {
-    public interface ITrafficSignService
+    public interface ITrafficSignervice
     {
-        public Task<IEnumerable<TrafficSigns>> GetTrafficSignByCategoryId(int categoryId);
+        public Task<IEnumerable<TrafficSign>> GetTrafficSignByCategoryId(int categoryId);
+    
     }
 }

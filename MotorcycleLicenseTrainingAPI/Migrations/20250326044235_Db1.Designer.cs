@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotorcycleLicenseTrainingAPI.Model;
 
@@ -11,9 +12,10 @@ using MotorcycleLicenseTrainingAPI.Model;
 namespace MotorcycleLicenseTrainingAPI.Migrations
 {
     [DbContext(typeof(MotorcycleLicenseTrainingContext))]
-    partial class MotorcycleLicenseTrainingContextModelSnapshot : ModelSnapshot
+    [Migration("20250326044235_Db1")]
+    partial class Db1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -798,7 +800,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                         {
                             Id = "77c46877-537a-4637-bafe-b76b21a2f56e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "87686594-8cd1-4b29-80c5-81693ef2d7c7",
+                            ConcurrencyStamp = "e32d454f-ad57-4df0-bb96-64eb8dd823aa",
                             CreatedAt = new DateTime(2025, 3, 25, 0, 4, 42, 607, DateTimeKind.Unspecified).AddTicks(9841),
                             Email = "demo11@gmail.com",
                             EmailConfirmed = false,
@@ -807,7 +809,7 @@ namespace MotorcycleLicenseTrainingAPI.Migrations
                             NormalizedUserName = "DEMO11@GMAIL.COM",
                             PasswordHash = "AQAAAAEAACcQAAAAENcEUydoUtT/B7gQw9O0TMdMvVZ11kOL7BXsa428YPOG84sJRcW1fcOTuYyN+xzmFQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3b124ef1-21c2-407d-b0ad-be9735d29e3c",
+                            SecurityStamp = "291f971b-3b88-4a27-80d9-2a6e4710b719",
                             TwoFactorEnabled = false,
                             UserName = "demo11@gmail.com"
                         });

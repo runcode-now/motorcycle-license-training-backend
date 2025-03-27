@@ -1,0 +1,18 @@
+name: Deploy production exe
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  docker-compose:
+    runs-on: self-hosted
+    environment: docker
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Run `docker-compose`
+        run: | 
+          cd MotorcycleLicenseTrainingAPI
+          docker compose up --build -d
