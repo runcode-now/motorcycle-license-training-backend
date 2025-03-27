@@ -19,7 +19,6 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpGet("getCategoryByType/{type}")]
-        [Authorize]
         public async Task<IActionResult> Get([FromRoute] string type)
         {
             try 

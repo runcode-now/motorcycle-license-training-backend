@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MotorcycleLicenseTrainingAPI.Model;
 
@@ -11,9 +12,10 @@ using MotorcycleLicenseTrainingAPI.Model;
 namespace MotorcycleLicenseTrainingAPI.Migrations
 {
     [DbContext(typeof(MotorcycleLicenseTrainingContext))]
-    partial class MotorcycleLicenseTrainingContextModelSnapshot : ModelSnapshot
+    [Migration("20250326045242_Database_verion_1")]
+    partial class Database_verion_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

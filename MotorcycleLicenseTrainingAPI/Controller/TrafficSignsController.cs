@@ -17,7 +17,6 @@ namespace MotorcycleLicenseTrainingAPI.Controller
         }
 
         [HttpGet("getByCategory/{categoryId}")]
-        [Authorize]
         public async Task<IActionResult> Get(int categoryId)
         {
             try
