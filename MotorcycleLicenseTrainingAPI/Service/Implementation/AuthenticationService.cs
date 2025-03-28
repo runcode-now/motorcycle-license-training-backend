@@ -25,27 +25,35 @@ namespace MotorcycleLicenseTrainingAPI.Service.Implementation
 
         public async Task<LoginResponse?> LoginUserAsync(LoginRequest request)
         {
-            var user = await _authRepository.GetUserByEmailAsync(request.Email);
-            if (user == null)
+            try
             {
-                Console.WriteLine($"User not found for email: {request.Email}");
-                return new LoginResponse { Authenticated = false, Token = string.Empty };
+                var user = await _authRepository.GetUserByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    Console.WriteLine($"User not found for email: {request.Email}");
+                    return new LoginResponse { Authenticated = false, Token = string.Empty };
+                }
+
+                var isValidPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+                if (!isValidPassword)
+                {
+                    Console.WriteLine($"Invalid password for user: {request.Email}");
+                    return new LoginResponse { Authenticated = false, Token = string.Empty };
+                }
+
+                var token = GenerateJwtToken(user);
+
+                return new LoginResponse
+                {
+                    Token = token,
+                    Authenticated = true
+                };
             }
-
-            var isValidPassword = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (!isValidPassword)
+            catch(Exception e)
             {
-                Console.WriteLine($"Invalid password for user: {request.Email}");
-                return new LoginResponse { Authenticated = false, Token = string.Empty };
+                throw new Exception(e.Message);
             }
-
-            var token = GenerateJwtToken(user);
-
-            return new LoginResponse
-            {
-                Token = token,
-                Authenticated = true
-            };
+            
         }
 
 

@@ -50,16 +50,94 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                     return BadRequest(new { message = "Dữ liệu không hợp lệ. Vui lòng cung cấp userId." });
                 }
 
-                // Lấy ngẫu nhiên 25 câu hỏi
-                var Question = await _context.Question
-                    .OrderBy(q => Guid.NewGuid())
-                    .Take(3)
+                // Thống kê số lần trả lời sai từ MockExamAnswer
+                var wrongAnswersStats = await _context.MockExamAnswer
+                    .Where(a => !a.IsCorrect) // Lọc các câu trả lời sai
+                    .GroupBy(a => a.QuestionId)
+                    .Select(g => new
+                    {
+                        QuestionId = g.Key,
+                        WrongCount = g.Count() // Đếm số lần sai
+                    })
+                    .OrderByDescending(x => x.WrongCount) // Sắp xếp theo số lần sai giảm dần
                     .ToListAsync();
 
-                //if (Question.Count < 25)
-                //{
-                //    return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 25 câu hỏi." });
-                //}
+                // Lấy danh sách tất cả câu hỏi từ bảng Question
+                var allQuestions = await _context.Question.ToListAsync();
+
+                // Nếu không có dữ liệu thống kê sai, chọn ngẫu nhiên từ tất cả câu hỏi
+                if (!wrongAnswersStats.Any())
+                {
+                    var randomQuestions = allQuestions
+                        .OrderBy(q => Guid.NewGuid())
+                        .Take(3)
+                        .ToList();
+
+                    if (randomQuestions.Count < 3)
+                    {
+                        return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 3 câu hỏi." });
+                    }
+
+                    var mock = new MockExam
+                    {
+                        ExamDate = DateTime.Now,
+                        TotalScore = -1,
+                        UserId = createDto.UserId,
+                        Status = "not_started",
+                        Questions = randomQuestions
+                    };
+
+                    _context.MockExam.Add(mock);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+
+                // Chia danh sách thành 3 nhóm: sai nhiều, sai trung bình, sai ít
+                int totalCount = wrongAnswersStats.Count;
+                if (totalCount < 3)
+                {
+                    return BadRequest(new { message = "Không đủ câu hỏi sai để chia nhóm. Cần ít nhất 3 câu hỏi." });
+                }
+
+                int groupSize = totalCount / 3;
+                var highWrongGroup = wrongAnswersStats.Take(groupSize).ToList(); // Sai nhiều
+                var mediumWrongGroup = wrongAnswersStats.Skip(groupSize).Take(groupSize).ToList(); // Sai trung bình
+                var lowWrongGroup = wrongAnswersStats.Skip(2 * groupSize).ToList(); // Sai ít
+
+                // Lấy ngẫu nhiên 1 câu từ mỗi nhóm
+                var selectedQuestions = new List<Question>();
+                Random rand = new Random();
+
+                // Sai nhiều
+                var highWrongQuestionId = highWrongGroup[rand.Next(highWrongGroup.Count)].QuestionId;
+                var highWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == highWrongQuestionId);
+                if (highWrongQuestion != null) selectedQuestions.Add(highWrongQuestion);
+
+                // Sai trung bình
+                var mediumWrongQuestionId = mediumWrongGroup[rand.Next(mediumWrongGroup.Count)].QuestionId;
+                var mediumWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == mediumWrongQuestionId);
+                if (mediumWrongQuestion != null && !selectedQuestions.Contains(mediumWrongQuestion))
+                    selectedQuestions.Add(mediumWrongQuestion);
+
+                // Sai ít
+                var lowWrongQuestionId = lowWrongGroup[rand.Next(lowWrongGroup.Count)].QuestionId;
+                var lowWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == lowWrongQuestionId);
+                if (lowWrongQuestion != null && !selectedQuestions.Contains(lowWrongQuestion))
+                    selectedQuestions.Add(lowWrongQuestion);
+
+                // Nếu không đủ 3 câu hỏi từ các nhóm, bổ sung ngẫu nhiên từ tất cả câu hỏi
+                while (selectedQuestions.Count < 3)
+                {
+                    var remainingQuestions = allQuestions
+                        .Where(q => !selectedQuestions.Contains(q))
+                        .ToList();
+                    if (!remainingQuestions.Any())
+                    {
+                        return BadRequest(new { message = "Không đủ câu hỏi để tạo bài thi. Cần ít nhất 3 câu hỏi." });
+                    }
+                    var randomQuestion = remainingQuestions[rand.Next(remainingQuestions.Count)];
+                    selectedQuestions.Add(randomQuestion);
+                }
 
                 // Tạo bài thi mới
                 var mockExam = new MockExam
@@ -67,11 +145,9 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                     ExamDate = DateTime.Now,
                     TotalScore = -1,
                     UserId = createDto.UserId,
-                    Status = "not_started"
+                    Status = "not_started",
+                    Questions = selectedQuestions.Take(3).ToList() // Đảm bảo chỉ lấy 3 câu
                 };
-
-                // Thêm danh sách câu hỏi vào MockExam
-                mockExam.Questions = Question;
 
                 _context.MockExam.Add(mockExam);
                 await _context.SaveChangesAsync();

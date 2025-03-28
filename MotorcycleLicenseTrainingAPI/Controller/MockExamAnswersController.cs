@@ -59,5 +59,6 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 return StatusCode(500, new { message = "Có lỗi xảy ra khi lấy câu trả lời. Vui lòng thử lại sau." });
             }
         }
+
     }
 }
