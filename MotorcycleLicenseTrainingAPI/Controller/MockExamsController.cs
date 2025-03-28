@@ -108,22 +108,32 @@ namespace MotorcycleLicenseTrainingAPI.Controller
                 var selectedQuestions = new List<Question>();
                 Random rand = new Random();
 
-                // Sai nhiều
-                var highWrongQuestionId = highWrongGroup[rand.Next(highWrongGroup.Count)].QuestionId;
-                var highWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == highWrongQuestionId);
-                if (highWrongQuestion != null) selectedQuestions.Add(highWrongQuestion);
+                // Sai nhiều (High Wrong)
+                var highWrongQuestions = highWrongGroup
+                    .OrderBy(x => rand.Next())
+                    .Take(1)
+                    .Select(x => allQuestions.FirstOrDefault(q => q.QuestionId == x.QuestionId))
+                    .Where(q => q != null)
+                    .ToList();
+                selectedQuestions.AddRange(highWrongQuestions);
 
-                // Sai trung bình
-                var mediumWrongQuestionId = mediumWrongGroup[rand.Next(mediumWrongGroup.Count)].QuestionId;
-                var mediumWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == mediumWrongQuestionId);
-                if (mediumWrongQuestion != null && !selectedQuestions.Contains(mediumWrongQuestion))
-                    selectedQuestions.Add(mediumWrongQuestion);
+                // Sai trung bình (Medium Wrong)
+                var mediumWrongQuestions = mediumWrongGroup
+                    .OrderBy(x => rand.Next())
+                    .Take(1)
+                    .Select(x => allQuestions.FirstOrDefault(q => q.QuestionId == x.QuestionId))
+                    .Where(q => q != null && !selectedQuestions.Contains(q))
+                    .ToList();
+                selectedQuestions.AddRange(mediumWrongQuestions);
 
-                // Sai ít
-                var lowWrongQuestionId = lowWrongGroup[rand.Next(lowWrongGroup.Count)].QuestionId;
-                var lowWrongQuestion = allQuestions.FirstOrDefault(q => q.QuestionId == lowWrongQuestionId);
-                if (lowWrongQuestion != null && !selectedQuestions.Contains(lowWrongQuestion))
-                    selectedQuestions.Add(lowWrongQuestion);
+                // Sai ít (Low Wrong)
+                var lowWrongQuestions = lowWrongGroup
+                    .OrderBy(x => rand.Next())
+                    .Take(1)
+                    .Select(x => allQuestions.FirstOrDefault(q => q.QuestionId == x.QuestionId))
+                    .Where(q => q != null && !selectedQuestions.Contains(q))
+                    .ToList();
+                selectedQuestions.AddRange(lowWrongQuestions);
 
                 // Nếu không đủ 3 câu hỏi từ các nhóm, bổ sung ngẫu nhiên từ tất cả câu hỏi
                 while (selectedQuestions.Count < 3)
