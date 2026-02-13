@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MotorcycleLicenseTrainingAPI.Model
 {
@@ -7,9 +8,8 @@ namespace MotorcycleLicenseTrainingAPI.Model
     {
         public int AnswerId { get; set; } 
         public string? AnswerText { get; set; } 
-        public bool? IsCorrect { get; set; } 
+        public bool? IsCorrect { get; set; }
 
-        
         public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
 

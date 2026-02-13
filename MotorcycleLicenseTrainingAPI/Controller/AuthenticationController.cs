@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MotorcycleLicenseTrainingAPI.Model;
-using MotorcycleLicenseTrainingAPI.Service.Implementation;
 using MotorcycleLicenseTrainingAPI.Service.Interface;
 
 namespace MotorcycleLicenseTrainingAPI.Controller
